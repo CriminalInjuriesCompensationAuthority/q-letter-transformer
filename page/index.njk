@@ -1,0 +1,30 @@
+{% extends "govuk/template.njk" %}
+
+{% block head %}
+  <style>
+    {% if isPreview %}
+      @media print {
+        .pdf-watermark {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) rotate(-30deg);
+          font-size: 120px;
+          font-weight: 800;
+          color: #000;
+          opacity: 0.12;
+          z-index: 2147483647;
+          pointer-events: none;
+          user-select: none;
+          mix-blend-mode: multiply;
+          text-transform: uppercase;
+          width: 100%;
+          text-align: center;
+        }
+      }
+    {% endif %}
+    {% include "govuk-frontend.min.css" %}
+  </style>
+{% endblock %}
+
+{% block pageTitle %}Claim criminal injuries compensation - GOV.UK{% endblock %}
