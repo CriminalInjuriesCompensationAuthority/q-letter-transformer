@@ -1,22 +1,24 @@
 'use strict';
 
 const nunjucks = require('nunjucks');
+const path = require('node:path');
+
+const govukFrontendRoot = path.dirname(require.resolve('govuk-frontend/package.json'));
+const BASE_DIR = path.resolve(__dirname, '../..');
 
 function render(transformation, data, isPreview){
     nunjucks
         .configure(
-            [
-                `node_modules/govuk-frontend/govuk/`,
-                `node_modules/govuk-frontend/govuk/components/`,
-                `node_modules/govuk-frontend/dist`,
-                `node_modules/govuk-frontend/dist/govuk/`,
-                `node_modules/govuk-frontend/dist/govuk/components/`,
-                `page/`
-            ],
-            {
-                autoescape: true
-            }
-        );
+        [
+            path.join(govukFrontendRoot, 'govuk/'),
+            path.join(govukFrontendRoot, 'govuk/components/'),
+            path.join(govukFrontendRoot, 'dist'),
+            path.join(govukFrontendRoot, 'dist/govuk/'),
+            path.join(govukFrontendRoot, 'dist/govuk/components/'),
+            path.join(BASE_DIR, 'page/'),
+        ],
+        { autoescape: true }
+    );
 
     return nunjucks.renderString(
         `
