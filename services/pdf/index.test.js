@@ -8,7 +8,7 @@ const mockNewPage = jest.fn().mockResolvedValue({ setContent: mockSetContent, pd
 const mockClose = jest.fn().mockResolvedValue();
 const mockLaunch = jest.fn().mockResolvedValue({ newPage: mockNewPage, close: mockClose });
 
-jest.mock('puppeteer', () => ({ launch: (...args) => mockLaunch(...args) }));
+jest.mock('puppeteer-core', () => ({ launch: (...args) => mockLaunch(...args) }));
 
 const createPdfBuffer = require('.');
 
@@ -18,9 +18,6 @@ test('launches puppeteer, sets content, generates pdf and closes', async () => {
     const html = '<html><body><h1>Hi</h1></body></html>';
     const out = await createPdfBuffer(html);
 
-    expect(mockLaunch).toHaveBeenCalledWith({
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
     expect(mockNewPage).toHaveBeenCalled();
     expect(mockSetContent).toHaveBeenCalledWith(html, { waitUntil: 'networkidle0' });
     expect(mockPdf).toHaveBeenCalledWith({ format: 'A4', printBackground: true });

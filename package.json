@@ -1,5 +1,5 @@
 {
-  "name": "cica-online-letter-builder",
+  "name": "q-letter-transformer",
   "version": "1.0.0",
   "description": "A utility to populate a letter template and generate a PDF.",
   "main": "index.js",
@@ -11,9 +11,10 @@
   "author": "Barry Piccinni",
   "license": "ISC",
   "dependencies": {
+    "@sparticuz/chromium": "^143.0.4",
     "govuk-frontend": "^5.13.0",
     "nunjucks": "^3.2.4",
-    "puppeteer": "^24.27.0",
+    "puppeteer-core": "^24.37.3",
     "q-transformer": "github:CriminalInjuriesCompensationAuthority/q-transformer#v5.4.0"
   },
   "devDependencies": {

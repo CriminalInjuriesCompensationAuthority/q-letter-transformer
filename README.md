@@ -19,10 +19,13 @@ const path = require('path');
 
 const createLetterService = require('./index');
 const letterService = createLetterService();
+const opts = {
+    format: "PDF"
+}
 
 // `letter` is the JSON payload shown below under "Example input"
 (async () => {
-  const out = await letterService.getLetterPdf(letter); // => Buffer
+  const out = await letterService.getLetter(letter, opts); // => Buffer
 
   const outputDir = path.resolve('./output');
   const outputPath = path.join(outputDir, 'a-letter.pdf');
@@ -36,11 +39,12 @@ const letterService = createLetterService();
 
 ## API
 
-### `getLetterPdf({ schema, letterData, isPreview }): Promise<Buffer>`
+### `getLetter({ schema, letterData, isPreview }, { format }): Promise<Buffer>`
 
 - **schema**: JSON schema describing page metadata and HTML content (Nunjucks syntax allowed in strings).
 - **letterData**: Plain object with values referenced by the template (e.g., `applicantForename`).
 - **isPreview**: `boolean` – when `true`, the output PDF includes a `PREVIEW` watermark.
+- **format**: `string` – format: "SCHEMA" returns an interpolated schema. format: "HTML" returns transformed html.
 - **Returns**: a Node.js **`Buffer`** containing the PDF bytes.
 
 ## Example input
@@ -62,7 +66,7 @@ const letterService = createLetterService();
     "properties": {
       "nil-decison-letter": {
         "title": "Decision about your application for compensation",
-        "description": "<div class=\"govuk-body\">{{ applicantForename }} {{ applicantSurname }}<br>Reference number: {{ caseReferenceNumber }}<br>{{ dateSent }}</div>"
+        "description": "<div class=\"govuk-body\">{{{ applicantForename }}} {{{ applicantSurname }}}<br>Reference number: {{{ caseReferenceNumber }}}<br>{{{ dateSent }}}</div>"
       }
     },
     "meta": {

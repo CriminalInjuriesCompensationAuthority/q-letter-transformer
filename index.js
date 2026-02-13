@@ -1,16 +1,27 @@
 'use strict';
 
 const transform = require('./services/transformer');
-const renderer = require('./services/templateRenderer');
-const getPdfBuffer = require('./services/pdf');
+const renderTemplate = require('./services/templateRenderer');
+const htmlToPdfBuffer = require('./services/pdf');
+const interpolate = require('./services/interpolator');
 
 function createLetterBuilder() {
-    async function getLetterPdf(data){
+    async function getLetter(data, opts){
+        const format = (opts?.format ?? 'PDF').toUpperCase();
         try {
-            const {schema, letterData, isPreview} = data;
-            const transformation = transform(schema);
-            const html = renderer(transformation, letterData, isPreview);
-            return getPdfBuffer(html);
+            const {schema, letterData, isPreview = false} = data;
+            const interpolatedSchema = interpolate({schema, data: letterData});
+            if (format === "SCHEMA"){
+                return interpolatedSchema;
+            }
+
+            const transformedSchema = transform(interpolatedSchema);
+            const html = renderTemplate(transformedSchema, letterData, isPreview);
+            if(format === "HTML"){
+                return html
+            }
+
+            return htmlToPdfBuffer(html);
         }
         catch (err) {
             throw new Error (`Failed to transform letter. Id: "${data.id}". Error: ${err}`)
@@ -18,7 +29,7 @@ function createLetterBuilder() {
     }
 
     return Object.freeze({
-        getLetterPdf
+        getLetter
     });
 }
 
