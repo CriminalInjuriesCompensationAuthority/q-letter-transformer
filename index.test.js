@@ -23,14 +23,14 @@ test('getLetterPdf orchestrates interpolate -> transform -> render -> pdf and re
     const { getLetter } = createLetterBuilder();
 
     const input = {
-        schema: { foo: '{{{ name }}}' },
+        template: { foo: '{{{ name }}}' },
         letterData: { name: 'Ada' },
         isPreview: true
     };
 
     const out = await getLetter(input);
 
-    expect(interpolate).toHaveBeenCalledWith({schema: input.schema, data: input.letterData});
+    expect(interpolate).toHaveBeenCalledWith({template: input.template, data: input.letterData});
     expect(transform).toHaveBeenCalledWith({ foo: 'Ada' });
     expect(renderTemplate).toHaveBeenCalledWith({ pageTitle: 'T', content: '<p>C</p>' }, { name: 'Ada' }, true);
     expect(htmlToPdfBuffer).toHaveBeenCalledWith('<html>FINAL</html>');
@@ -40,5 +40,5 @@ test('getLetterPdf orchestrates interpolate -> transform -> render -> pdf and re
 test('bubbles errors from any step', async () => {
     transform.mockImplementation(() => { throw new Error('boom'); });
     const { getLetter } = createLetterBuilder();
-    await expect(getLetter({ schema: {}, letterData: {} })).rejects.toThrow('boom');
+    await expect(getLetter({ template: {}, letterData: {} })).rejects.toThrow('boom');
 });
