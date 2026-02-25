@@ -9,14 +9,14 @@ function createLetterBuilder() {
     async function getLetter(data, opts){
         const format = (opts?.format ?? 'PDF').toUpperCase();
         try {
-            const {schema, letterData, isPreview = false} = data;
-            const interpolatedSchema = interpolate({schema, data: letterData});
-            if (format === "SCHEMA"){
-                return interpolatedSchema;
+            const {template, letterData, isPreview = false} = data;
+            const interpolatedTemplate = interpolate({template, data: letterData});
+            if (format === "TEMPLATE"){
+                return interpolatedTemplate;
             }
 
-            const transformedSchema = transform(interpolatedSchema);
-            const html = renderTemplate(transformedSchema, letterData, isPreview);
+            const transformedTemplate = transform(interpolatedTemplate);
+            const html = renderTemplate(transformedTemplate, letterData, isPreview);
             if(format === "HTML"){
                 return html
             }
